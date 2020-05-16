@@ -50,7 +50,10 @@
                  const params = {
                      username: this.loginForm.username,
                      password: this.loginForm.password
-                 }
+                 };
+                 this.$http.login(this.loginForm).then(res=>{
+                     console.log(res)
+                 })
              })
            }
         },

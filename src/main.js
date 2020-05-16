@@ -4,9 +4,13 @@ import router from './router'
 import store from './store'
 import ElementUI from "element-ui"
 import "element-ui/lib/theme-chalk/index.css"
+import http from "./utils/http"
+import auth from "./utils/auth"
 
 Vue.config.productionTip = false;
 Vue.use(ElementUI);
+Vue.prototype.$auth = auth;
+Vue.prototype.$http = http;
 
 new Vue({
   router,
