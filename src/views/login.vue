@@ -52,7 +52,11 @@
                      password: this.loginForm.password
                  };
                  this.$http.login(this.loginForm).then(res=>{
-                     console.log(res)
+                     const data = res.data;
+                     const token = data.token;
+                     const user = data.user;
+                     this.$auth.setUserToken(user, token);
+                     this.$router.push("/")
                  })
              })
            }
