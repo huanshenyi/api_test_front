@@ -9,7 +9,7 @@
                             <router-link to="/">ホーム</router-link>
                         </li>
                         <li>
-                            <router-link to="#">プロダクト管理</router-link>
+                            <router-link to="/project">プロダクト管理</router-link>
                         </li>
                         <li>
                             <router-link to="#">メンバー管理</router-link>

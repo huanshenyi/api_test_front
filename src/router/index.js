@@ -4,7 +4,7 @@ import Frame from '../views/frame'
 import Index from "../views/index"
 import Login from "../views/login"
 import auth from '../utils/auth'
-import el from "element-ui/src/locale/lang/el";
+import ProjectList from "../views/projectList"
 
 Vue.use(VueRouter);
 
@@ -15,11 +15,17 @@ Vue.use(VueRouter);
     name: "frame",
     redirect: '/index',
     children:
-        [{
-            path: "/index",
-            component: Index,
-            name: "index"
-          }]
+        [
+            {
+                path: "/index",
+                component: Index,
+                name: "index"
+            },
+            {
+                path: "/project",
+                component: ProjectList,
+                name: "projectList"
+            }]
   },
   {
     path: '/login',
