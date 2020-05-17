@@ -10,7 +10,7 @@ class Http {
             baseURL: BASE_URL
         });
 
-        //インターセプト、JWT処理用
+        //インターセプト、JWTをリクエストに追加用
         this.http.interceptors.request.use(config => {
             const token = auth.token;
             if (token && token !== "undefined") {
@@ -31,6 +31,15 @@ class Http {
     login(params){
         const url = "/auth/login";
         return this.http.post(url, params)
+    }
+    addProject(params){
+        const url= "/project";
+        return this.http.post(url, params)
+    }
+    //全てのプロジェクトを取得
+    getProjectList(){
+        const url = "/project";
+        return this.http.get(url);
     }
 }
 

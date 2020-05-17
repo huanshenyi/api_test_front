@@ -6,9 +6,9 @@
         </div>
         <el-table :data="projects" style="width: 100%">
             <el-table-column prop="name" label="プロジェクト名" width="180">
-                <template slot-scope="scope">
-                    <router-link :to="/project/"+scope.row.id>{{scope.row.name}}</router-link>
-                </template>
+              <template slot-scope="scope">
+                <router-link :to="'/project/'+scope.row.id">{{scope.row.name}}</router-link>
+              </template>
             </el-table-column>
             <el-table-column prop="type" label="タイプ" width="100">
             </el-table-column>
@@ -54,6 +54,12 @@
 <script>
     export default {
         name: "ProjectList",
+        mounted() {
+          this.$http.getProjectList().then(res=>{
+              const projects = res.data;
+              this.projects = projects
+          })
+        },
         data(){
             return {
                 projects: [],
@@ -70,18 +76,37 @@
                     type: [
                       {required: true,message: "タイプを選びください！",trigger: "blur"}
                     ]
-                  }
+                  },
+                addProjectButtonLoading:false
             }
         },
         methods: {
+            initProjectForm(){
+              this.projectForm = {
+                    name: "",
+                    type: '',
+                    description: ""
+              }
+            },
             onEditProject(){
 
             },
             onSubmitAddProject(){
+                this.addProjectButtonLoading = true;
                 this.$refs.projectForm.validate(valid => {
                     if(!valid){
                         return
                     }
+                    this.$http.addProject(this.projectForm).then(res => {
+                        this.addProjectButtonLoading = false;
+                        if(res && res.status === 201){
+                            const project = res.data;
+                            this.projects.push(project);
+                            this.addDialogVisiable = false;
+                            this.initProjectForm();
+                            this.$message.success("プロジェクト新規追加しました。")
+                        }
+                    })
                 })
             }
         }
