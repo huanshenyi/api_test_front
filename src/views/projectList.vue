@@ -2,7 +2,7 @@
     <div class="">
         <h1 style="font-weight: bold;padding-bottom: 5px">プロジェクトリスト</h1>
         <div class="top-group">
-            <el-button type="primary" icon="el-icon-plus" @click="addDialogVisiable=true">プロダクト追加</el-button>
+            <el-button type="primary" icon="el-icon-plus" @click="onAddProjectButtonClick">プロダクト追加</el-button>
         </div>
         <el-table :data="projects" style="width: 100%">
             <el-table-column prop="name" label="プロジェクト名" width="180">
@@ -64,6 +64,7 @@
             return {
                 projects: [],
                 addDialogVisiable: false,
+                dialogType: "add",
                 projectForm: {
                     name: "",// プロダクト名
                     type: '',// app?web
@@ -81,6 +82,7 @@
             }
         },
         methods: {
+            // データ提出後のfromデータ削除用
             initProjectForm(){
               this.projectForm = {
                     name: "",
@@ -88,8 +90,18 @@
                     description: ""
               }
             },
-            onEditProject(){
-
+            onAddProjectButtonClick(){
+                this.dialogType = "add"
+            },
+            onEditProject(project){
+                this.projectForm = {
+                    name: project.name,
+                    type: project.type,
+                    description: project.description,
+                    id: project.id
+                };
+                this.addDialogVisiable = true;
+                this.dialogType = "edit"
             },
             onSubmitAddProject(){
                 this.addProjectButtonLoading = true;
@@ -97,16 +109,36 @@
                     if(!valid){
                         return
                     }
-                    this.$http.addProject(this.projectForm).then(res => {
-                        this.addProjectButtonLoading = false;
-                        if(res && res.status === 201){
-                            const project = res.data;
-                            this.projects.push(project);
-                            this.addDialogVisiable = false;
-                            this.initProjectForm();
-                            this.$message.success("プロジェクト新規追加しました。")
-                        }
-                    })
+                    if(this.dialogType === "add"){
+                        this.$http.addProject(this.projectForm).then(res => {
+                            this.addProjectButtonLoading = false;
+                            if(res && res.status === 201){
+                                const project = res.data;
+                                this.projects.push(project);
+                                this.addDialogVisiable = false;
+                                this.initProjectForm();
+                                this.$message.success("プロジェクト新規追加しました。")
+                            }
+                        })
+                    }else {
+                         this.$http.editProjectList(this.projectForm.id, this.projectForm).then(res =>{
+                             this.addProjectButtonLoading = false;
+                             if(res){
+                               this.addDialogVisiable = false;
+                               this.initProjectForm();
+                               const project = res.data;
+                               let index = 0;
+                               for(let loop_project of this.projects){
+                                   if(loop_project.id === project.id){
+                                       this.$set(this.projects, index, project);
+                                       break
+                                   }
+                                   index++
+                               }
+                               this.$message.success("内容修正しました。")
+                             }
+                         })
+                    }
                 })
             }
         }

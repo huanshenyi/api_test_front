@@ -41,6 +41,11 @@ class Http {
         const url = "/project";
         return this.http.get(url);
     }
+    // プロダクト編集
+    editProjectList(project_id, params){
+        const url = "/project/" + project_id;
+        return this.http.put(url, params)
+    }
 }
 
 export default new Http();
