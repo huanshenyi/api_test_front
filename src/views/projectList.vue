@@ -12,7 +12,10 @@
             </el-table-column>
             <el-table-column prop="type" label="タイプ" width="100">
             </el-table-column>
-            <el-table-column prop="last_update_time" label="ラスト修正時刻">
+            <el-table-column label="ラスト修正時刻">
+                <template slot-scope="scope">
+                    {{scope.row.last_update_time | dateFormat}}
+                </template>
             </el-table-column>
             <el-table-column prop="description" label="詳細">
             </el-table-column>

@@ -7,12 +7,18 @@ import "element-ui/lib/theme-chalk/index.css"
 import http from "./utils/http"
 import auth from "./utils/auth"
 import message from "./utils/message"
+import filters from "./utils/filters";
 
 Vue.config.productionTip = false;
 Vue.use(ElementUI);
 Vue.prototype.$auth = auth;
 Vue.prototype.$http = http;
 Vue.prototype.$message = message;
+
+//フィルターのリジェクト
+Object.keys(filters).forEach(key=>{
+  Vue.filter(key, filters[key])
+});
 
 new Vue({
   router,
