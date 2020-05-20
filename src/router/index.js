@@ -5,6 +5,7 @@ import Index from "../views/index"
 import Login from "../views/login"
 import auth from '../utils/auth'
 import ProjectList from "../views/projectList"
+import ProjectDetail from "../views/projectDetail"
 
 Vue.use(VueRouter);
 
@@ -25,7 +26,13 @@ Vue.use(VueRouter);
                 path: "/project",
                 component: ProjectList,
                 name: "projectList"
-            }]
+            },
+            {
+                path: "/project/:project_id",
+                component: ProjectDetail,
+                name: "ProjectDetail"
+            },
+        ]
   },
   {
     path: '/login',
