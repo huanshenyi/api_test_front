@@ -5,7 +5,7 @@
                <ProjectInfo :project="project"></ProjectInfo>
             </el-tab-pane>
             <el-tab-pane label="プロダクトHost" name="2">
-               プロダクトHost
+               <HostList :project="project"></HostList>
             </el-tab-pane>
             <el-tab-pane label="API管理" name="3">
                API
@@ -22,6 +22,7 @@
 
 <script>
 import ProjectInfo from "../components/ProjectInfo";
+import HostList from "../components/HostList";
     export default {
         name: "projectDetail",
         data() {
@@ -31,13 +32,15 @@ import ProjectInfo from "../components/ProjectInfo";
            }
         },
         components: {
+            HostList,
             ProjectInfo
         },
         mounted() {
             const project_id = this.$route.params.project_id;
             this.$http.getProjectDetail(project_id).then(res=>{
                 const project = res.data;
-                this.project = project
+                this.project = project;
+                console.log(this.project);
             })
         }
     }

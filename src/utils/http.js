@@ -51,6 +51,16 @@ class Http {
         const url = "/project/" + project_id;
         return this.http.get(url)
     }
+    //host追加
+    addHost(params){
+        const url = "/host";
+        return this.http.post(url, params);
+    }
+    //host削除
+    deleteHost(host_id){
+        const url = "/host/" + host_id;
+        return this.http.delete(url)
+    }
 }
 
 export default new Http();
