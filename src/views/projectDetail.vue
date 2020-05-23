@@ -8,7 +8,7 @@
                <HostList :project="project"></HostList>
             </el-tab-pane>
             <el-tab-pane label="API管理" name="3">
-               API
+               <ApiEntry :project="project"></ApiEntry>
             </el-tab-pane>
             <el-tab-pane label="テストケース" name="4">
                テストケース
@@ -23,6 +23,7 @@
 <script>
 import ProjectInfo from "../components/ProjectInfo";
 import HostList from "../components/HostList";
+import ApiEntry from "../components/Api/ApiEntry";
     export default {
         name: "projectDetail",
         data() {
@@ -33,7 +34,8 @@ import HostList from "../components/HostList";
         },
         components: {
             HostList,
-            ProjectInfo
+            ProjectInfo,
+            ApiEntry
         },
         mounted() {
             const project_id = this.$route.params.project_id;
