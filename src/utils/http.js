@@ -61,6 +61,16 @@ class Http {
         const url = "/host/" + host_id;
         return this.http.delete(url)
     }
+    //api追加
+    addApi(params){
+        const url = "/api";
+        return this.http.post(url, params)
+    }
+    //api削除
+    deleteApi(api_id){
+        const url = "api/"+api_id;
+        return this.http.delete(url)
+    }
 }
 
 export default new Http();

@@ -23,8 +23,8 @@
                                <el-option label="PUT" value="PUT"></el-option>
                            </el-select>
                        </el-form-item>
-                       <el-form-item label="host" prop="host">
-                           <el-select v-model="form.host" placeholder="hostをお選びください">
+                       <el-form-item label="host" prop="host_id">
+                           <el-select v-model="form.host_id" placeholder="hostをお選びください">
                               <template v-if="project && project.host_list">
                                 <el-option v-for="host in project.host_list" :label="host.name" :value="host.id" :key="host.name"></el-option>
                               </template>
@@ -129,7 +129,7 @@
           return {
               form:{
                   name: "",
-                  host: "",
+                  host_id: "",//backedではserializersのhost_idである
                   http_method: "",
                   path: "",
                   headers: [{name:"", value:""}],
@@ -140,7 +140,7 @@
               },
               rules: {
                 name: [{required: true,trigger:"blur",message: "API名称を入れてください！"}],
-                host: [{required: true,trigger:"change",message: "hostを選びください！"}],
+                host_id: [{required: true,trigger:"change",message: "hostを選びください！"}],
                 http_method: [{required: true,trigger:"change",message: "http methodを選択してください！"}],
                 path: [{required: true,trigger:"blur",message: "PATHを入力してください！"}],
                 expect_code: [{required: true,trigger:"change",message: "ステータスコード選びください！"}]
@@ -185,7 +185,37 @@
             onGotoApiList(){
                 this.$emit("page-changed", pageType.API_LIST)
             },
-            onSave(){},
+            onSave(){
+                this.$refs.form.validate(valid => {
+                    if(!valid){
+                        return
+                    }
+                    const params = JSON.parse(JSON.stringify(this.form));
+                    const headers = [];
+                    const formdata = [];
+                    for(let header of params.headers){
+                        if(header.name && header.value){
+                            headers.push(header)
+                        }
+                    }
+                    for(let data of params.data) {
+                        if(data.name && data.value){
+                            formdata.push(data)
+                        }
+                    }
+                    params.headers = JSON.stringify(headers);
+                    params.data = JSON.stringify(formdata);
+                    params.project_id = this.project.id;
+                    this.$loading.show();
+                    this.$http.addApi(params).then(res => {
+                        this.$loading.hide();
+                        this.$message.success();
+                        const api = res.data;
+                        this.project.api_list.push(api);
+                        this.$emit("page-changed", pageType.API_LIST)
+                    })
+                })
+            },
             onCancel(){},
             onDeleteHeader(index){
                 this.form.headers.splice(index, 1)
