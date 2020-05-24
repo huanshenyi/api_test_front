@@ -10,6 +10,7 @@
     import pageType from "./pageType";
     export default {
         name: "ApiList",
+        props: ['project'],
         data(){
             return {
 
