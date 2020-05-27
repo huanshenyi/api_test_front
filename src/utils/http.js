@@ -71,6 +71,11 @@ class Http {
         const url = "api/"+api_id;
         return this.http.delete(url)
     }
+    //api編集
+    editApi(api_id, params){
+        const url = "api/"+api_id;
+        return this.http.put(url, params)
+    }
 }
 
 export default new Http();

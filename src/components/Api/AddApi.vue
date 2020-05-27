@@ -125,6 +125,25 @@
     export default {
         name: "AddApi",
         props: ['project','api'],
+        mounted() {
+            if(this.api){
+                const headers = JSON.parse(this.api.headers);
+                const formdata = JSON.parse(this.api.data);
+                const form = {
+                  id: this.api.id,
+                  name: this.api.name,
+                  host_id: this.api.host.id,//backedではserializersのhost_idである
+                  http_method: this.api.http_method,
+                  path: this.api.path,
+                  headers: headers.length > 0 ? headers: [{name:"", value:""}],
+                  data: formdata.length > 0 ? formdata: [{name:"", value:""}],
+                  description: this.api.description,
+                  expect_code: this.api.expect_code,
+                  expect_content: this.api.expect_content
+                };
+                this.form = form
+            }
+        },
         data(){
           return {
               form:{
@@ -207,13 +226,33 @@
                     params.data = JSON.stringify(formdata);
                     params.project_id = this.project.id;
                     this.$loading.show();
-                    this.$http.addApi(params).then(res => {
-                        this.$loading.hide();
-                        this.$message.success();
-                        const api = res.data;
-                        this.project.api_list.push(api);
-                        this.$emit("page-changed", pageType.API_LIST)
-                    })
+                    if(this.form.id){
+                        //編集
+                        this.$http.editApi(this.api.id, params).then(res => {
+                            this.$loading.hide();
+                            this.$message.success();
+                            const api = res.data;
+                            let index = 0;
+                            //変更後のapiで元のapi_listのitemと入れ替え
+                            for(let temp_api of this.project.api_list){
+                                if(temp_api.id === api.id){
+                                    this.project.api_list[index] = api;
+                                    break
+                                }
+                                index++
+                            }
+                            this.$emit("page-changed", pageType.API_LIST)
+                        })
+                    }else {
+                        //新規追加
+                        this.$http.addApi(params).then(res => {
+                            this.$loading.hide();
+                            this.$message.success();
+                            const api = res.data;
+                            this.project.api_list.push(api);
+                            this.$emit("page-changed", pageType.API_LIST)
+                        })
+                    }
                 })
             },
             onCancel(){},

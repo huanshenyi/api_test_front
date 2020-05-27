@@ -49,7 +49,11 @@
                 this.$emit("page-changed", pageType.ADD_API)
             },
             onRunApi(api, index){},
-            onEditApi(api, index){},
+            // apiの編集
+            onEditApi(api, index){
+               //
+                this.$emit("page-changed", pageType.ADD_API, api)
+            },
             onDeleteApi(api, index){
                 this.$messagebox.confirm({
                     confirmCallback: () => {
