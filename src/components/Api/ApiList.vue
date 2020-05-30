@@ -30,6 +30,23 @@
               </template>
             </el-table-column>
         </el-table>
+
+        <el-dialog title="実行結果" :visible.sync="dialogVisiable" width="80%">
+            <el-table :data="[record]" height="250">
+                <el-table-column fixed property="url" label="url" width="150"></el-table-column>
+                <el-table-column property="http_method" label="リクエストmethod" width="100"></el-table-column>
+                <el-table-column property="headers" label="リクエストヘッド"></el-table-column>
+                <el-table-column property="data" label="リクエストボディ"></el-table-column>
+                <el-table-column property="return_code" label="ステータスコード" width="80"></el-table-column>
+                <el-table-column property="return_content" label="リスポンスボディ"></el-table-column>
+                <el-table-column property="run_result" label="テスト結果" width="100">
+                    <template slot-scope="scope">
+                        <el-tag type="success" v-if="scope.row.run_result===true">成功</el-tag>
+                        <el-tag type="danger" v-if="scope.row.run_result===false">失敗</el-tag>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-dialog>
     </div>
 </template>
 
@@ -40,7 +57,8 @@
         props: ['project'],
         data(){
             return {
-
+               dialogVisiable: false,
+               record: {}
             }
         },
         components:{},
@@ -48,7 +66,18 @@
             onGotoAddApi(){
                 this.$emit("page-changed", pageType.ADD_API)
             },
-            onRunApi(api, index){},
+            // apiの実行
+            onRunApi(api, index){
+                this.$loading.show();
+                this.$http.runApi(api.id).then(res => {
+                    this.$loading.hide();
+                    const record = res.data;
+                    console.log(record);
+                    record.run_result = record.return_code === record.api.expect_code;
+                    this.record = record;
+                    this.dialogVisiable = true
+                })
+            },
             // apiの編集
             onEditApi(api, index){
                //

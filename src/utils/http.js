@@ -76,6 +76,11 @@ class Http {
         const url = "api/"+api_id;
         return this.http.put(url, params)
     }
+    //apiの実行
+    runApi(api_id){
+        const url = "/run/api/" + api_id;
+        return this.http.post(url)
+    }
 }
 
 export default new Http();
