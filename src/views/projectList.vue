@@ -19,7 +19,7 @@
             </el-table-column>
             <el-table-column prop="description" label="詳細">
             </el-table-column>
-            <el-table-column label="状態" width="100">
+            <el-table-column label="ステータス" width="100">
                 <template>
                     <el-tag type="success">使用可能</el-tag>
                 </template>
