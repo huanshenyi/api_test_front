@@ -11,7 +11,7 @@
                <ApiEntry :project="project"></ApiEntry>
             </el-tab-pane>
             <el-tab-pane label="テストケース" name="4">
-               テストケース
+               <CaseEntry :project="project"></CaseEntry>
             </el-tab-pane>
             <el-tab-pane label="実行履歴" name="5">
                実行履歴
@@ -24,6 +24,7 @@
 import ProjectInfo from "../components/ProjectInfo";
 import HostList from "../components/HostList";
 import ApiEntry from "../components/Api/ApiEntry";
+import CaseEntry from "../components/Case/CaseEntry";
     export default {
         name: "projectDetail",
         data() {
@@ -35,7 +36,8 @@ import ApiEntry from "../components/Api/ApiEntry";
         components: {
             HostList,
             ProjectInfo,
-            ApiEntry
+            ApiEntry,
+            CaseEntry
         },
         mounted() {
             const project_id = this.$route.params.project_id;
