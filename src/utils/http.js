@@ -81,6 +81,11 @@ class Http {
         const url = "/run/api/" + api_id;
         return this.http.post(url)
     }
+    //test caseの新規追加
+    addCase(params){
+        const url = "/case";
+        return this.http.post(url, params);
+    }
 }
 
 export default new Http();

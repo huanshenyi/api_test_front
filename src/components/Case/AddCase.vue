@@ -93,7 +93,7 @@
             return {
                 form: {
                 name: "",
-                description: "",
+                description: "", //詳細
                 arguments: [{name:"",value:""}],
                 api_list: [
                   {
@@ -115,7 +115,54 @@
             onGotoCaseList(){
                this.$emit("page-changed", pageType.CASE_LIST)
             },
-            onSave(){},
+            // テストケースの保存
+            onSave(){
+                this.$refs.form.validate(valid => {
+                    if(!valid){
+                        return
+                    }
+                    const params = JSON.parse(JSON.stringify(this.form));
+                    let args = [];
+                    for(let argument of params.arguments){
+                        if(argument.name && argument.value){
+                            args.push(argument)
+                        }
+                    }
+                    params.arguments = args;
+
+                    // APIとパラメータの処理
+                    const api_list = [];
+                    let index = 0;
+                    for(let api of params.api_list){
+                        // idあれば保留
+                        if(api.id){
+                            let args = [];
+                            for(let argument of api.arguments){
+                                if(argument.name && argument.origin && argument.format){
+                                    args.push(argument)
+                                }
+                            }
+                            api.arguments = args;
+                            api.index = index;
+                            api_list.push(api);
+                            index ++
+                        }
+                    }
+                    params.api_list = api_list;
+                    // それ以外のパラメータを処理
+                    params.project_id = this.project.id;
+
+                    this.$loading.show();
+                    this.$http.addCase(params).then(res => {
+                        this.$loading.hide();
+                        // test case
+                        const case_model = res.data;
+                        this.project.case_list.push(case_model);
+                        this.$emit("page-changed", pageType.CASE_LIST);
+                        this.$message.success()
+                    })
+                })
+            },
             onCancel(){},
             // テストケースパラメータの削除
             onRemoveCaseArgument(argument,index){
@@ -131,7 +178,11 @@
             },
             // api追加
             onAddApi(case_api,index){
-                this.form.api_list.push(case_api)
+                this.form.api_list.push({
+                    id: "",
+                    index: 0,
+                    arguments: [{name:"", origin:"", format:""}]
+                })
             },
             //
             onRemoveApiArgument(case_api,argument,index){
@@ -139,7 +190,7 @@
             },
             //
             onAddApiArgument(case_api){
-                case_api.arguments.push(case_api)
+                case_api.arguments.push({name:"", origin:"", format:""})
             }
         }
     }
