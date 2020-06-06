@@ -1,7 +1,8 @@
 <template>
    <div>
        <CaseList v-if="page===pageType.CASE_LIST" :project="project" @page-changed="onPageChanged"></CaseList>
-       <AddCase v-if="page===pageType.ADD_CASE" :project="project" @page-changed="onPageChanged"></AddCase>
+       <AddCase v-if="page===pageType.ADD_CASE"
+                :project="project" @page-changed="onPageChanged" :caseObj="caseObj"></AddCase>
    </div>
 </template>
 
@@ -15,7 +16,8 @@
         data() {
             return {
                 page: pageType.CASE_LIST,
-                pageType
+                pageType,
+                caseObj: null,
             }
         },
         components: {
@@ -23,8 +25,10 @@
             CaseList
         },
         methods: {
-            onPageChanged(page){
+            // 表示内容の切り替え用
+            onPageChanged(page, caseObj){
                 this.page = page;
+                this.caseObj = caseObj;
             }
         }
     }

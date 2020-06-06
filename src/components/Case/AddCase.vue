@@ -88,7 +88,7 @@
     import pageType from "./pageType";
     export default {
         name: "AddCase",
-        props: ["project"],
+        props: ["project", "caseObj"],
         data(){
             return {
                 form: {
@@ -111,6 +111,24 @@
             }
         },
         components: {},
+        mounted() {
+            //caseが編集状態であるかどうかの判断
+            if(this.caseObj){
+                this.form.id = this.caseObj.id;
+                this.form.name = this.caseObj.name;
+                this.form.description = this.caseObj.description;
+                this.form.arguments = JSON.parse(JSON.stringify(this.caseObj.arguments));
+                if(!this.form.arguments || this.form.arguments.length===0){
+                  this.form.arguments = [{name:"",value:""}]
+                }
+                this.form.api_list = JSON.parse(JSON.stringify(this.caseObj.api_list));
+                for(let api of this.form.api_list){
+                    if(!api.arguments || api.arguments.length === 0){
+                      api.arguments = [{name:"",origin:"",format:""}]
+                    }
+                }
+            }
+        },
         methods: {
             onGotoCaseList(){
                this.$emit("page-changed", pageType.CASE_LIST)
@@ -153,14 +171,29 @@
                     params.project_id = this.project.id;
 
                     this.$loading.show();
-                    this.$http.addCase(params).then(res => {
+                    if(this.form.id){
+                      this.$http.editCase(this.form.id,params).then(res => {
                         this.$loading.hide();
-                        // test case
-                        const case_model = res.data;
-                        this.project.case_list.push(case_model);
-                        this.$emit("page-changed", pageType.CASE_LIST);
-                        this.$message.success()
-                    })
+                        this.$message.success();
+                        const caseobj = res.data;
+                        for(let index=0;index<this.project.case_list.length;index++){
+                          const temp_case = this.project.case_list[index];
+                          if(temp_case.id === caseobj.id){
+                            this.project.case_list[index] = caseobj;
+                            break
+                          }
+                        }
+                        this.$emit('page-changed',pageType.CASE_LIST)
+                      })
+                    }else{
+                      this.$http.addCase(params).then(res => {
+                        const caseobj = res.data;
+                        this.project.case_list.push(caseobj);
+                        this.$loading.hide();
+                        this.$message.success();
+                        this.$emit('page-changed',pageType.CASE_LIST)
+                      })
+                    }
                 })
             },
             onCancel(){},
@@ -170,7 +203,7 @@
             },
             // テストケースパラメータの増加
             onAddCaseArgument(argument,index){
-                this.form.arguments.push(argument)
+                this.form.arguments.push({name:"",value:""})
             },
             // apiを削除
             onRemoveApi(case_api,index){

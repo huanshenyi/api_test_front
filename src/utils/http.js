@@ -86,6 +86,11 @@ class Http {
         const url = "/case";
         return this.http.post(url, params);
     }
+    //test caseの編集
+    editCase(case_id, params){
+        const url = "/case/" + case_id;
+        return this.http.put(url, params);
+    }
 }
 
 export default new Http();
