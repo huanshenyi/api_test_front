@@ -22,6 +22,24 @@
                 </template>
             </el-table-column>
         </el-table>
+
+        <el-dialog title="実行結果" :visible.sync="dialogVisible" width="80%">
+              <el-table :data="records" height="500">
+                  <el-table-column fixed property="url" label="url" width="150"></el-table-column>
+                  <el-table-column property="http_method" label="リクエストメソッド" width="100"></el-table-column>
+                  <el-table-column property="headers" label="リクエストヘッド"></el-table-column>
+                  <el-table-column property="data" label="リクエストボディ"></el-table-column>
+                  <el-table-column property="return_code" label="ステータスコード" width="80"></el-table-column>
+                  <el-table-column property="return_content" label="リスポンスボディ"></el-table-column>
+                  <el-table-column property="run_result" label="テスト結果" width="100">
+                    <template slot-scope="scope">
+                      <el-tag type="success" v-if="scope.row.run_result==true">Success</el-tag>
+                      <el-tag type="danger" v-if="scope.row.run_result==false">Failure</el-tag>
+                    </template>
+                  </el-table-column>
+              </el-table>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -32,15 +50,33 @@
         name: "CaseList",
         props: ["project"],
         data(){
-            return {}
+            return {
+                dialogVisible:false,
+                records: []
+            }
         },
         components: {},
         methods: {
             onAddCase(){
                 this.$emit("page-changed", pageType.ADD_CASE)
             },
+            // テストケースの実行
             onRunCase(caseObj, index){
-
+                this.$loading.show();
+                this.$http.runCase(caseObj.id).then(res => {
+                    this.$loading.hide();
+                    const case_record = res.data;
+                    const records = case_record.api_records;
+                    for(let record of records){
+                       if(record.return_code === record.api.expect_code){
+                           record.run_result = true
+                       }else {
+                           record.run_result = false
+                       }
+                    }
+                    this.records = records;
+                    this.dialogVisible = true;
+                })
             },
             onEditCase(caseObj, index){
                 this.$emit("page-changed", pageType.ADD_CASE, caseObj)

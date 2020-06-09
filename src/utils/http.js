@@ -91,6 +91,11 @@ class Http {
         const url = "/case/" + case_id;
         return this.http.put(url, params);
     }
+    // test caseの実行
+    runCase(case_id){
+        const url="/run/case/"+case_id;
+        return this.http.post(url);
+    }
 }
 
 export default new Http();
