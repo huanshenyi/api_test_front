@@ -96,6 +96,11 @@ class Http {
         const url="/run/case/"+case_id;
         return this.http.post(url);
     }
+    // 実行記録を取得
+    getRunRecords(project_id, type){
+        const url = "/records?project="+project_id + "&type=" + type;
+        return this.http.get(url)
+    }
 }
 
 export default new Http();
