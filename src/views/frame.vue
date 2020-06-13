@@ -24,7 +24,7 @@
                          </span>
                          <el-dropdown-menu slot="dropdown">
                              <el-dropdown-item>
-                                 <router-link to="/setting">設定</router-link>
+                                 <router-link to="/settings">設定</router-link>
                              </el-dropdown-item>
                              <el-dropdown-item @click.native="onLogout">ログアウト</el-dropdown-item>
                          </el-dropdown-menu>

@@ -6,6 +6,7 @@ import Login from "../views/login"
 import auth from '../utils/auth'
 import ProjectList from "../views/projectList"
 import ProjectDetail from "../views/projectDetail"
+import Settings from "../views/settings"
 
 Vue.use(VueRouter);
 
@@ -32,6 +33,11 @@ Vue.use(VueRouter);
                 component: ProjectDetail,
                 name: "ProjectDetail"
             },
+            {
+                path: "settings",
+                component: Settings,
+                name: "settings"
+            }
         ]
   },
   {
