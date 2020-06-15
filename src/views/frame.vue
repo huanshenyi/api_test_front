@@ -18,7 +18,7 @@
                     <div class="signout">
                        <el-dropdown>
                          <span class="el-dropdown-link">
-                             <img class="avatar-img" src="http://127.0.0.1:8000/static/image/default.png" alt="">
+                             <img class="avatar-img" :src="$auth.user.avatar || 'http://127.0.0.1:8000/static/image/default.png'" alt="">
                              {{$auth.user.username}}
                              <i class="el-icon-arrow-down el-icon--right"></i>
                          </span>

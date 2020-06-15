@@ -101,6 +101,11 @@ class Http {
         const url = "/records?project="+project_id + "&type=" + type;
         return this.http.get(url)
     }
+    // ユーザーデータ変更
+    editUser(params) {
+        const url = "/auth/user";
+        return this.http.put(url, params);
+    }
 }
 
 export default new Http();

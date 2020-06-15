@@ -24,7 +24,7 @@ class Auth {
         localStorage.setItem(USER_KEY, JSON.stringify(user));
         localStorage.setItem(TOKEN_KEY, token)
     }
-
+    // ローカルストレージに保存
     setUser(user) {
         this.user = user;
         localStorage.setItem(USER_KEY, JSON.stringify(user))

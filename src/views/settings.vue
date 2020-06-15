@@ -48,7 +48,7 @@
               headers: {
                 'Authorization': "JWT " + this.$auth.token
               },
-              upload_action: "http://127.0.0.1:8000/auth/upload",
+              upload_action: "http://127.0.0.1:8000/auth/avatar",
               rules:{
                 username: [{required: true,trigger:"blur",message:"ユーザーネームを入力してください！"}],
                 email: [{required: true,trigger:"blur",message:"アドレスを入力してください！"}],
@@ -59,6 +59,7 @@
         components:{},
         mounted(){
             const user = this.$auth.user;
+            console.log(user);
             let form = {
               username:user.username,
               email:user.email,
