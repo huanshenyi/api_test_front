@@ -7,6 +7,7 @@ import auth from '../utils/auth'
 import ProjectList from "../views/projectList"
 import ProjectDetail from "../views/projectDetail"
 import Settings from "../views/settings"
+import MemberList from "../views/memberList"
 
 Vue.use(VueRouter);
 
@@ -37,6 +38,11 @@ Vue.use(VueRouter);
                 path: "settings",
                 component: Settings,
                 name: "settings"
+            },
+            {
+                path: "users",
+                component: MemberList,
+                name: "users"
             }
         ]
   },

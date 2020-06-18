@@ -106,6 +106,11 @@ class Http {
         const url = "/auth/user";
         return this.http.put(url, params);
     }
+    // ユーザーリストを取得
+    getUserList(){
+        const url = "/auth/user";
+        return this.http.get(url)
+    }
 }
 
 export default new Http();

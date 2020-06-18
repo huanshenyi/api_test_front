@@ -12,7 +12,7 @@
                             <router-link to="/project">プロダクト管理</router-link>
                         </li>
                         <li>
-                            <router-link to="#">メンバー管理</router-link>
+                            <router-link to="/users">メンバー管理</router-link>
                         </li>
                     </ul>
                     <div class="signout">
