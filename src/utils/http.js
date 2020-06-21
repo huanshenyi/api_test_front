@@ -111,6 +111,11 @@ class Http {
         const url = "/auth/user";
         return this.http.get(url)
     }
+    // ホームページ用のデータを取得
+    getIndexData(){
+        const url = "/index";
+        return this.http.get(url);
+    }
 }
 
 export default new Http();
