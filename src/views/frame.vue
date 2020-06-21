@@ -5,13 +5,13 @@
                 <a href="/"  class='brand'>テスト</a>
                 <div class="header-content">
                     <ul class="menu-list">
-                        <li class="active">
+                        <li :class="activeIndex===0? 'active': '' ">
                             <router-link to="/">ホーム</router-link>
                         </li>
-                        <li>
+                        <li :class="activeIndex===1? 'active': '' ">
                             <router-link to="/project">プロダクト管理</router-link>
                         </li>
-                        <li>
+                        <li :class="activeIndex===2? 'active': '' ">
                             <router-link to="/users">メンバー管理</router-link>
                         </li>
                     </ul>
@@ -47,13 +47,26 @@
         name: "frame",
         data() {
             return {
-
+              activeIndex: -1
             }
         },
         methods:{
           onLogout(){
               this.$auth.clearUserToken();
               this.$router.replace("/login")
+          }
+        },
+        watch: {
+          "$route": function(to, form) {
+              if(to.name === "index"){
+                  this.activeIndex = 0
+              }else if(to.path.indexOf("project") > 0){
+                  this.activeIndex = 1
+              }else if(to.path.indexOf("users") > 0){
+                  this.activeIndex = 2
+              }else {
+                  this.activeIndex = -1
+              }
           }
         },
         components: {}
